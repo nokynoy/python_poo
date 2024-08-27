@@ -1,4 +1,5 @@
 from frota import *
+import pickle
 
 def operar_carro(carro : Carro):
     print('1- Ligar motor')
@@ -20,6 +21,11 @@ def operar_carro(carro : Carro):
 
 if __name__ == "__main__":
     print('Cadastre o 1° carro')
+    try:
+        with open('carro.pkt','rb') as arquivo:
+            carros = pickle.load(arquivo)
+    except Exception as e:
+        print(e)
     nm_modelo = input('Digite o modelo: ')
     nm_marca = input('Digite a marca: ')
     nm_cor = input('Digite a cor: ')
@@ -29,6 +35,13 @@ if __name__ == "__main__":
     carro1 = Carro(nm_modelo, nm_marca, nm_cor, 0, True, litros, cm)
 
     print('Cadastre o 2° carro')
+
+    try:
+        with open('carro.pkt', 'rb') as arquivo:
+            carros = pickle.load(arquivo)
+    except Exception as e:
+        print(e)
+
     nm_modelo = input('Digite o modelo: ')
     nm_marca = input('Digite a marca: ')
     nm_cor = input('Digite a cor: ')
@@ -39,7 +52,18 @@ if __name__ == "__main__":
     '''
     Controlando o carro até ele atingir 10000 Km
     '''
-    while carro1.odometro < 600 and carro2.odometro < 600 and(carro1.tanque>0 and carro2.tanque>0):
+    carros = {}
+    carros[id(carro1)] = carro1
+    carros[id(carro2)] = carro2
+    try:
+        with open('carros.pkl', 'wb') as arquivo:
+            pickle.dump(carros,arquivo)
+
+    except Exception as e:
+        print(e)
+
+
+    while carro1.get_odometro() < 600 and carro2.get_odometro() < 600 and(carro1.get_tanque()>0 and carro2.get_tanque()>0):
         try:
             op = 0
             while op not in (1, 2):
